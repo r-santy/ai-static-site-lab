@@ -32,12 +32,13 @@ jobs:
     # If you enable the CI deploy, uncomment the following Configure AWS credentials step
     # and add AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY to the repository Secrets.
     #
-    # - name: Configure AWS credentials
-    #   uses: aws-actions/configure-aws-credentials@v4
-    #   with:
-    #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    #     aws-region: ${{ env.AWS_REGION }}
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+    #    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #    aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        role-to-assume: arn:aws:iam::825370898596:role/GitHubS3DeployRole
+        aws-region: ${{ env.AWS_REGION }}
 
     # Optional: ensure aws cli v2 is available on the runner before running aws commands.
     # Uncomment this if you see "aws: command not found" on the runner.
@@ -48,7 +49,7 @@ jobs:
     # Deploy to S3 bucket (commented out by default).
     # Only enable after you've configured repository secrets (and understand the security implications).
     #
-    # - name: Deploy to S3
-    #   run: |
-    #     aws s3 sync site/ s3://${{ env.BUCKET_NAME }} --region ${{ env.AWS_REGION }} --delete
+    - name: Deploy to S3
+      run: |
+        aws s3 sync site/ s3://${{ env.BUCKET_NAME }} --region ${{ env.AWS_REGION }} --delete
     #   # Note: --delete removes files in S3 that are not in the site/ directory. Use with caution.
